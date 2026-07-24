@@ -4,7 +4,6 @@ The package layout is:
 
 ```
 ├── README.md                 <- you are reading it
-├── LICENSE                   <- MIT license (OSI-approved)
 ├── code/                     <- production scripts
 │   ├── 1.Seurat.R
 │   ├── 2.cellchat.R
@@ -14,11 +13,9 @@ The package layout is:
 └── demo/                     <- example dataset + runnable end-to-end demo
     ├── README.md             <- demo-specific instructions
     ├── run_demo.sh           <- one-shot demo runner (5 steps)
-    ├── config/               <- CONFIG blocks consumed by demo.scRNA_pipeline.R
-    ├── code/                 <- demo versions of the scripts (R-3.x + R413 compatible)
+    ├── code/                 <- demo versions of the scripts
     │   ├── demo.Seurat.R, demo.edgeR.R, demo.scRNA_pipeline.R
-    │   ├── demo.cellchat_init.R, demo.cellchat_sample.R  (CellChat two-step)
-    │   └── gen_demo_data.py + merge_10x.py  (dataset regenerators)
+    │   └── demo.cellchat_init.R, demo.cellchat_sample.R  (CellChat two-step)
     ├── data/                 <- small synthetic 10X dataset (400 cells x 1000 genes)
     ├── results/              <- populated when demo is run
     └── expected_output/      <- saved summaries for reviewer byte-diff
@@ -26,9 +23,18 @@ The package layout is:
 
 ------------------------------------------------------------------------
 
-## 1. Required content
+## 1. System requirements
 
-### 1.1 Compiled standalone software and/or source code
+**Operating system:**
+
+* CentOS 7.9.2009
+
+**Software:**
+
+* **R ≥ 4.1.3** 
+* **Java 8+** for clusterProfiler / ReactomePA enrichment plotting.
+
+**R packages:**
 
 All analysis is implemented in **R 4.1.3** with the following R packages
 (`code/README.md` lists them in detail):
@@ -50,68 +56,11 @@ All analysis is implemented in **R 4.1.3** with the following R packages
 | dplyr           | 1.0.9              | Data wrangling                           |
 | patchwork       | 1.1.1              | Multi-panel plots                        |
 
-### 1.2 A small (simulated or real) dataset to demo the software/code
-
-The `demo/data/` directory ships a **simulated** 10X dataset:
-
-* 2 conditions × 2 replicates × 100 cells = **400 cells**
-* **800 genes** including real cell-type markers (CD3D, CD14, EPCAM,
-  COL1A1, …), interferon-stimulated genes (ISG15, MX1, IFIT1, …), and
-  400+ synthetic `GENE_NNNN` placeholders so reviewers can see the
-  noise floor.
-* 4 ground-truth cell types per condition: **T_cell, Myeloid,
-  Epithelial, Stromal** (with proportions skewed toward Myeloid in the
-  PEDV condition to mimic infection-driven expansion).
-* The dataset is provided in two forms:
-
-  * `demo/data/raw/{Control,PEDV}_rep{1,2}/` — four per-replicate 10X
-    folders, used by script 4 (`scRNA_pipeline.R`).
-  * `demo/data/merged/{Control,PEDV}/` — replicates concatenated per
-    condition, used by script 1 (`Seurat.R`).
-  * `demo/data/Myeloid.exp.xls` — gene × sample count matrix restricted
-    to the Myeloid lineage, used by script 3 (`edgeR.R`).
-
-The synthetic generator is shipped as `demo/code/gen_demo_data.py` and
-`demo/code/merge_10x.py` so reviewers can recreate the dataset with a
-different random seed or change cell counts.
-
-The simulated data is **not** a substitute for the manuscript's
-biological data — it is small enough (≈ 1 MB) to keep the demo under
-three minutes and structured enough that the published workflow
-recovers the expected cell types and the interferon-stimulated gene
-signature in PEDV (see §3 below).
 
 ------------------------------------------------------------------------
 
-## 2. README file
 
-### 2.1 System requirements
-
-**Operating system.** Tested on:
-
-* CentOS 6.10 (kernel 2.6.32, the server used for the manuscript runs).
-* Ubuntu 20.04 / 22.04 LTS (x86_64) for cross-platform validation.
-* macOS 12+ (Apple Silicon works once R / Bioconductor binaries are
-  available; not the primary target).
-
-**Hardware.** A "normal" desktop computer is sufficient:
-
-* 8 GB RAM minimum (16 GB recommended for the full single-cell run on
-  real data — the demo itself only needs ~2 GB).
-* ≥ 4 CPU cores recommended (harmony / CCA integration are
-  multi-threaded). No GPU required. No non-standard hardware.
-
-**Software.**
-
-* **R ≥ 4.1.0** . Earlier versions (3.6.x) will fail on Seurat ≥ 4.x.
-* **Java 8+** for clusterProfiler / ReactomePA enrichment plotting.
-
-The Seurat 3.x compatible demo scripts (`demo/code/demo.*.R`) have
-additionally been validated against the conda R 3.5.1 environment that
-ships with Seurat 3.1.1 (`/Bio/bin/Rscript-3.5.1_conda` on the
-manuscript server). See *Known issues* below for what changes.
-
-### 2.2 Installation guide
+## 2 Installation guide
 
 ```bash
 # 1. Install R 4.1.3 (skip if already present; conda works too)
@@ -139,10 +88,29 @@ conda env):
 | `BiocManager::install(...)`               | 30–45 min|
 | **Total**                                 | **≈ 35–55 min** |
 
-### 2.3 Demo
+## 3 Demo
+### 3.1 Dataset of demo
 
-The demo runs end-to-end on a 400-cell synthetic dataset. See
-`demo/README.md` for the full instructions; in short:
+The `demo/data/` directory ships a **simulated** 10X dataset:
+
+* 2 conditions × 2 replicates × 100 cells = **400 cells**
+* **800 genes** including real cell-type markers (CD3D, CD14, EPCAM,
+  COL1A1, …), interferon-stimulated genes (ISG15, MX1, IFIT1, …), and
+  400+ synthetic `GENE_NNNN` placeholders so reviewers can see the
+  noise floor.
+* 4 ground-truth cell types per condition: **T_cell, Myeloid,
+  Epithelial, Stromal** (with proportions skewed toward Myeloid in the
+  PEDV condition to mimic infection-driven expansion).
+* The dataset is provided in two forms:
+
+  * `demo/data/raw/{Control,PEDV}_rep{1,2}/` — four per-replicate 10X
+    folders, used by script 4 (`scRNA_pipeline.R`).
+  * `demo/data/merged/{Control,PEDV}/` — replicates concatenated per
+    condition, used by script 1 (`Seurat.R`).
+  * `demo/data/Myeloid.exp.xls` — gene × sample count matrix restricted
+    to the Myeloid lineage, used by script 3 (`edgeR.R`).
+
+### 3.2 Run on data
 
 ```bash
 cd demo
@@ -152,22 +120,15 @@ bash run_demo.sh
 The script runs five R scripts in sequence and writes their outputs
 to `demo/results/`:
 
-| Step                       | Script                            | R env              | Output dir                    |
-|----------------------------|-----------------------------------|--------------------|-------------------------------|
-| Seurat CCA integration     | `demo/code/demo.Seurat.R`         | R 3.5.1_conda      | `demo/results/seurat/`        |
-| harmony integration        | `demo/code/demo.scRNA_pipeline.R` | R 3.5.1_conda      | `demo/results/scRNA_pipeline/`|
-| edgeR DE on Myeloid subset | `demo/code/demo.edgeR.R`          | R 3.5.1_conda      | `demo/results/edger/`         |
-| CellChat: build init.Rds   | `demo/code/demo.cellchat_init.R`  | R 4.1.3 (R413)     | `demo/results/cellchat/`      |
-| CellChat: run inference    | `demo/code/demo.cellchat_sample.R`| R 4.1.3 (R413)     | `demo/results/cellchat/`      |
+| Step                       | Script                            | R env          | Output dir                    |
+|----------------------------|-----------------------------------|----------------|-------------------------------|
+| Seurat CCA integration     | `demo/code/demo.Seurat.R`         | R 4.1.3        | `demo/results/seurat/`        |
+| harmony integration        | `demo/code/demo.scRNA_pipeline.R` | R 4.1.3        | `demo/results/scRNA_pipeline/`|
+| edgeR DE on Myeloid subset | `demo/code/demo.edgeR.R`          | R 4.1.3        | `demo/results/edger/`         |
+| CellChat: build init.Rds   | `demo/code/demo.cellchat_init.R`  | R 4.1.3        | `demo/results/cellchat/`      |
+| CellChat: run inference    | `demo/code/demo.cellchat_sample.R`| R 4.1.3        | `demo/results/cellchat/`      |
 
-The first three steps run with `/Bio/bin/Rscript-3.5.1_conda` (Seurat
-3.x compatible). The CellChat steps run with
-`/public2/Bio/pipeline/Toolkit/miniconda/miniconda3/envs/R413/bin/Rscript`
-because CellChat (>= 1.6) is not installed in the 3.5.1 conda env.
-Override the interpreters via `R_BIN=` / `R413_BIN=` env vars, or
-`RUN_CELLCHAT=0` to skip the CellChat step.
-
-**Expected output :**
+### 3.3 Expected output
 
 ```
 demo/results/
@@ -196,50 +157,7 @@ demo/results/
     ├── cellchat.Rds          <- final CellChat object
     └── cellchat_summary.txt
 ```
-
-A successful run prints the following counts in
-`demo/results/seurat/run_summary.txt`:
-
-```
-cells_total       : 400
-genes_total       : 1000
-samples           : Control,PEDV
-n_clusters        : 4
-n_markers_total   : ~80
-top_marker_example: cluster 0 -> CD2     # T-cell marker
-                    cluster 1 -> CSF1R   # Myeloid marker
-                    cluster 2 -> EPCAM   # Epithelial marker
-                    cluster 3 -> COL1A1 # Stromal marker
-```
-
-…and in `demo/results/edger/Myeloid.demo.summary.txt`:
-
-```
-input_genes           : 1000
-input_genes_after_flt : ~990
-DE_genes_sig          : ~80            # ISGs and inflammation markers dominate
-top_up_regulated:  NMI, IFIT2, ISG15, … # ISGs up in PEDV
-top_down_regulated: small set of synthetic genes
-```
-
-…and in `demo/results/cellchat/cellchat_summary.txt`:
-
-```
-cells              : 400
-cell_types         : C0,C1,C2,C3
-n_lr_pairs_total   : 68
-n_lr_pairs_sig     : 68
-n_pathways_visualised: 5
-pathway_examples   : CCL, COLLAGEN, GALECTIN, TNF, VEGF
-```
-
-The recovery of CD2 / CSF1R / EPCAM / COL1A1 as cluster-defining
-markers, NMI / IFIT2 / ISG15 as the top PEDV-up-regulated genes, and
-the canonical LR pathways (CCL, TNF, VEGF, …) confirms that the full
-pipeline — including the CellChat cell-cell communication step — is
-wired correctly end-to-end.
-
-**Expected run time.** On a "normal" desktop (8-core, 16 GB):
+### 3.4 Expected run time
 
 | Step                       | Wall-clock |
 |----------------------------|-----------:|
@@ -248,10 +166,9 @@ wired correctly end-to-end.
 | edgeR DE                   | < 5 s      |
 | CellChat init + inference  | ≈ 60 s     |
 | **Total**                  | **≈ 5 min**|
+## 4 Instructions for use
 
-### 2.4 Instructions for use
-
-#### 2.4.1 Running the pipeline on your own 10X data
+### 4.1 Running the pipeline on your own 10X data
 
 For each `Seurat.R`-style integration run:
 
@@ -269,7 +186,7 @@ The script produces `obj.Rda` (or `<prefix>.seurat.rds`), a set of
 `UMAP.pdf` / `TSNE.pdf` plots, and a `markers.Rda` table of cluster
 markers.
 
-#### 2.4.2 Differential expression on a single lineage
+### 4.2 Differential expression on a single lineage
 
 `code/3.edgeR.R` is the bulk-style DE script. It expects a tab-separated
 count matrix (`Myeloid.exp.xls`) whose first `C_number+T_number` columns
@@ -277,17 +194,13 @@ are raw counts (rows = genes). Adjust the four header variables at the
 top of the file (`count_file`, `C_number`, `T_number`, `group_colnames`)
 and run `Rscript code/3.edgeR.R`.
 
-#### 2.4.3 Cell-cell communication
+### 4.3 Cell-cell communication
 
 `code/2.cellchat.R` expects a Seurat object converted to a CellChat
-object (`cellchat.init.Rds`). Follow the [CellChat vignette][1] to
-produce that RDS, then run the script.
+object (`cellchat.init.Rds`). 
 
-#### 2.4.4 Differential expression + enrichment per cluster
+### 4.4 Differential expression + enrichment per cluster
 
 `code/5.scRNA_diff_enrich.R` reads `<prefix>.seurat.rds`, runs DE
 (presto or FindMarkers), then ORA/GSEA enrichment against GO, KEGG,
-Reactome, and Hallmark. Configuration is in the `CONFIG` block at the
-top of the file.
-
-[1]: https://github.com/sqjin/CellChat
+Reactome, and Hallmark. 

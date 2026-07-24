@@ -57,7 +57,7 @@ After `run_demo.sh` completes, see:
 | `results/seurat/cluster_markers.tsv`       | top 5 markers per cluster             |
 | `results/seurat/UMAP.pdf`                  | UMAP coloured by sample + cluster      |
 | `results/seurat/TSNE.pdf`                  | t-SNE coloured by sample + cluster     |
-| `results/seurat/obj.Rda`                   | Seurat object (Seurat 3.x format)      |
+| `results/seurat/obj.Rda`                   | Seurat object                          |
 | `results/seurat/markers.Rda`               | FindAllMarkers result                  |
 | `results/scRNA_pipeline/demo_result.seurat.rds` | Seurat object with harmony reduction |
 | `results/scRNA_pipeline/demo_result.metadata.csv` | per-cell metadata                   |

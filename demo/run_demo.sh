@@ -6,13 +6,8 @@
 # Usage:
 #   bash run_demo.sh                       # full demo including CellChat
 #   RUN_CELLCHAT=0 bash run_demo.sh        # skip CellChat step
-#   R_BIN=... R413_BIN=... bash run_demo.sh
+#   R_BIN=... bash run_demo.sh
 #                                            # override R interpreters
-#
-# The Seurat / harmony / edgeR / scRNA_pipeline steps run with
-# conda R 3.5.1 (Seurat 3.x compatible). The CellChat step needs an
-# R env that ships CellChat (>=1.5); the default R413_BIN points at
-# /public2/Bio/pipeline/Toolkit/miniconda/miniconda3/envs/R413/.
 #
 # Expected total runtime on a "normal" desktop: ~5 minutes
 #   - demo.Seurat.R            ~90 s
@@ -30,15 +25,12 @@ DEMO_DIR="$ROOT_DIR/demo"
 RESULTS_DIR="$DEMO_DIR/results"
 mkdir -p "$RESULTS_DIR"
 
-R_BIN="${R_BIN:-/Bio/bin/Rscript-3.5.1_conda}"
+R_BIN="${R_BIN:-Rscript}"
 if ! command -v "$R_BIN" >/dev/null 2>&1; then
   echo "ERROR: $R_BIN not found. Set R_BIN env var to your Rscript path." >&2
   exit 1
 fi
 
-# CellChat needs an R env that ships it; the manuscript server has it
-# at /public2/.../R413/. Override via R413_BIN if needed.
-R413_BIN="${R413_BIN:-Rscript}"
 RUN_CELLCHAT="${RUN_CELLCHAT:-auto}"
 
 MERGED_INPUT="$DEMO_DIR/data/merged"
@@ -80,28 +72,28 @@ if [ "$RUN_CELLCHAT" = "0" ]; then
   cellchat_can_run="no"
   echo
   echo "=== CellChat step skipped (RUN_CELLCHAT=0) ==="
-elif [ "$RUN_CELLCHAT" = "auto" ] && ! command -v "$R413_BIN" >/dev/null 2>&1; then
+elif [ "$RUN_CELLCHAT" = "auto" ] && ! command -v "$R_BIN" >/dev/null 2>&1; then
   cellchat_can_run="no"
   echo
-  echo "=== CellChat step skipped ($R413_BIN not found; set R413_BIN to enable) ==="
-elif ! command -v "$R413_BIN" >/dev/null 2>&1; then
+  echo "=== CellChat step skipped ($R_BIN not found; set R_BIN to enable) ==="
+elif ! command -v "$R_BIN" >/dev/null 2>&1; then  
   cellchat_can_run="no"
   echo
-  echo "=== CellChat step skipped ($R413_BIN not found) ==="
+  echo "=== CellChat step skipped ($R_BIN not found) ==="
 fi
 
 if [ "$cellchat_can_run" = "yes" ]; then
   echo
-  echo "=== demo.cellchat_init.R (CellChat init from Seurat, R=$R413_BIN) ==="
+  echo "=== demo.cellchat_init.R (CellChat init from Seurat, R=$R_BIN) ==="
   CC_OUT="$RESULTS_DIR/cellchat"
   mkdir -p "$CC_OUT"
   if [ ! -f "$SEURAT_OUT/obj.Rda" ]; then
     echo "WARNING: $SEURAT_OUT/obj.Rda missing; CellChat step aborted." >&2
   else
-    "$R413_BIN" "$DEMO_DIR/code/demo.cellchat_init.R" "$SEURAT_OUT/obj.Rda" "$CC_OUT"
+    "$R_BIN" "$DEMO_DIR/code/demo.cellchat_init.R" "$SEURAT_OUT/obj.Rda" "$CC_OUT"
     echo
-    echo "=== demo.cellchat_sample.R (CellChat inference, R=$R413_BIN) ==="
-    "$R413_BIN" "$DEMO_DIR/code/demo.cellchat_sample.R" "$CC_OUT"
+    echo "=== demo.cellchat_sample.R (CellChat inference, R=$R_BIN) ==="
+    "$R_BIN" "$DEMO_DIR/code/demo.cellchat_sample.R" "$CC_OUT"
   fi
 fi
 

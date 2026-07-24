@@ -1,13 +1,7 @@
-## demo.Seurat.R - Seurat 3.x compatible demo version of 1.Seurat.R
+## demo.Seurat.R - Seurat compatible demo version of 1.Seurat.R
 ##
 ## This script demonstrates end-to-end usage of the analysis pipeline on
 ## the small simulated dataset shipped in /demo/data/merged.
-##
-## Behaviour matches the spirit of ../code/1.Seurat.R but uses only the
-## Seurat 3.x API (FindIntegrationAnchors no longer takes
-## `normalization.method`, and SplitObject.Image is replaced by a plain
-## SplitObject) so it runs on the conda R 3.5.1 environment that hosts
-## Seurat 3.1.1.
 ##
 ## Usage:
 ##   Rscript demo.Seurat.R <input_dir> <output_dir>

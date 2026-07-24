@@ -1,9 +1,4 @@
-## demo.scRNA_pipeline.R - Seurat 3.x + harmony demo version of 4.scRNA_pipeline.R
-##
-## Mirrors the design of ../code/4.scRNA_pipeline.R (CONFIG block driving
-## the same pipeline), but uses only APIs available in Seurat 3.1.1 +
-## harmony 1.0 (no SeuratObject dependency, no Seurat 4-only helpers such
-## as SplitObject.Image or FindIntegrationAnchors(... normalization.method)).
+## demo.scRNA_pipeline.R - Seurat harmony demo version of 4.scRNA_pipeline.R
 ##
 ## Usage:
 ##   Rscript demo.scRNA_pipeline.R <config.r>

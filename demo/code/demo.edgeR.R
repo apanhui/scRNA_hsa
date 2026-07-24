@@ -1,11 +1,5 @@
 ## demo.edgeR.R - direct copy of 3.edgeR.R, only the output dir is parametrised
 ##
-## Identical logic to ../code/3.edgeR.R so reviewers can compare the
-## output with what the production script would produce. Reads a tab-
-## separated count matrix from --count-file, runs edgeR exactTest with
-## the same dispersion / cutoffs used in the manuscript, and writes
-## both unfiltered and filtered DE tables.
-##
 ## Usage:
 ##   Rscript demo.edgeR.R --count-file <tsv> --out-prefix <prefix>
 ##

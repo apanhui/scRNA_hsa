@@ -2,10 +2,7 @@
 ##
 ## Reads the Seurat object produced by demo.Seurat.R (under
 ## demo/results/seurat/obj.Rda) and creates the cellchat.init.Rds file
-## that cellchat_sample.R expects as input. Mirrors the role of
-## ../seurat2cellchat.R in the production pipeline but stays as short
-## as possible: human CellChatDB, no species auto-detect, no label
-## remapping beyond the "C0/C1" rule CellChat requires.
+## that cellchat_sample.R expects as input.
 ##
 ## Usage:
 ##   Rscript demo.cellchat_init.R <seurat_obj.rda> <out_dir>

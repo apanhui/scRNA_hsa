@@ -2,9 +2,6 @@
 ##
 ## Reads <out_dir>/cellchat.init.Rds (produced by demo.cellchat_init.R)
 ## and runs the same inference block as the production cellchat_sample.R.
-## Kept intentionally short: only the blocks that produce the figures
-## and tables named in the manuscript are kept (LR tables, pathway-level
-## tables, hierarchy + circle + heatmap for top-5 pathways).
 ##
 ## Usage:
 ##   Rscript demo.cellchat_sample.R <work_dir>
