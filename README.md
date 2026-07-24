@@ -26,7 +26,7 @@ The package layout is:
 
 ------------------------------------------------------------------------
 
-## 1. Required content (per Nature Research checklist)
+## 1. Required content
 
 ### 1.1 Compiled standalone software and/or source code
 
