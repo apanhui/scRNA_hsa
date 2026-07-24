@@ -1,0 +1,6 @@
+cells_total       : 400
+genes_total       : 1000
+samples           : Control,PEDV
+n_clusters        : 4
+n_markers_total   : 118
+top_marker_example: cluster 0 -> CD3E

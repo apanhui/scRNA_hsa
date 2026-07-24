@@ -1,0 +1,5 @@
+cell_types         : C0,C1,C2,C3
+n_lr_pairs_total   : 68
+n_lr_pairs_sig     : 68
+n_pathways_visualised: 5
+pathway_examples   : CCL, COLLAGEN, GALECTIN

@@ -1,0 +1,15 @@
+input_genes           : 1000
+input_genes_after_flt : 998
+DE_genes_sig          : 67
+top_up_regulated:
+  MX1 log2FC=46.16 P=4.13e-58
+  CXCL10 log2FC=45.37 P=1.71e-34
+  GENE_0523 log2FC=41.30 P=0.00782
+  GENE_0265 log2FC=41.14 P=0.0156
+  GENE_0842 log2FC=41.14 P=0.0156
+top_down_regulated:
+  GENE_0582 log2FC=-41.73 P=0.0156
+  GENE_0726 log2FC=-41.46 P=0.0313
+  GENE_0334 log2FC=-3.80 P=0.0391
+  GENE_0059 log2FC=-3.14 P=0.0117
+  GENE_0863 log2FC=-3.02 P=0.0215
